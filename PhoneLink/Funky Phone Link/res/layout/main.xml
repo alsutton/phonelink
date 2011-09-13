@@ -38,7 +38,7 @@
 	    			android:layout_width="fill_parent"
 	    			android:layout_height="wrap_content"
 			        android:layout_weight="2"
-			        android:gravity="bottom"/>
+			        android:layout_gravity="bottom"/>
 	</LinearLayout>    
 	<ListView		android:id="@+id/contacts"
 					android:layout_weight="1"
