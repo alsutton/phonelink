@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Parcel;
 import android.util.Log;
 
 import com.funkyandroid.phonelink.IntentHandler;
@@ -21,7 +21,7 @@ class ConnectionHandlerThread extends Thread {
 	 * The highest protocol number this thread can handle
 	 */
 
-	private static final int MAX_PROTOCOL_VERSION = 1;
+	private static final int MAX_PROTOCOL_VERSION = 2;
 
 	/**
 	 * The errors which can be sent back to the client
@@ -95,30 +95,19 @@ class ConnectionHandlerThread extends Thread {
 			return E_UNSUPPORTED_PROTOCOL_VERSION;
 		}
 
-		String action = readString(dis);
-		Log.i("PhoneLink", "Got action "+action);
-		String url = readString(dis);
-		Log.i("PhoneLink", "Got URL "+url);
-
-		Intent newIntent = new Intent(action, Uri.parse(url));
-		mIntentHandler.processIntent(newIntent);
-		return OK;
-	}
-
-	/**
-	 * Read a string from the data input stream
-	 */
-
-	private String readString(final DataInputStream dis)
-		throws IOException {
 		int length = dis.readInt();
+		Log.i("PhoneLink", "Received a "+length+" byte parcel");
 		byte[] data = new byte[length];
-
 		int position = 0;
 		do {
 			position += dis.read(data, position, length-position);
 		} while(position < length);
 
-		return new String(data, "UTF-8");
+		Parcel parcel = Parcel.obtain();
+		parcel.unmarshall(data, 0, length);
+		parcel.setDataPosition(0);
+		Intent newIntent = (Intent) parcel.readValue(Intent.class.getClassLoader());
+		mIntentHandler.processIntent(newIntent);
+		return OK;
 	}
 }

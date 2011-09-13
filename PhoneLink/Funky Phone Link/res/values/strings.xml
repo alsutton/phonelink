@@ -10,5 +10,9 @@
     <string name="none">None</string>
     <string name="dial">Dial</string>
     <string name="number_hint">Phone Number</string>
+    <string name="sms_hint">Enter SMS message</string>
+    <string name="send_sms">Send SMS</string>
     <string name="strapbar">Phone Link by Funky Android Ltd.</string>
+    <string name="warning">This software is in an early stage of development. Please do not use unless you have read the instructions carefully and
+    you are willing to accept there may be bugs.</string>
 </resources>

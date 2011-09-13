@@ -11,8 +11,8 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Parcel;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 public class Client {
 
@@ -20,7 +20,7 @@ public class Client {
 	 * The protocol verison in use
 	 */
 
-	private static final int PROTOCOL_VERSION = 1;
+	private static final int PROTOCOL_VERSION = 2;
 
 	/**
 	 * Dial a number
@@ -68,7 +68,6 @@ public class Client {
 	private void sendData(final BluetoothAdapter adapter, final BluetoothDevice device, final Intent intent)
 		throws IOException, PhoneLinkRemoteException {
 		adapter.cancelDiscovery();
-		Log.i("PhoneLink", "Connecting to "+device.getName()+" - "+device.getAddress()+" - "+device.getBondState());
 		BluetoothSocket socket = device.createRfcommSocketToServiceRecord(Server.MY_UUID);
 		try {
 			socket.connect();
@@ -76,8 +75,11 @@ public class Client {
 			DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 			try {
 				dos.writeInt(PROTOCOL_VERSION);
-				sendString(dos, intent.getAction());
-				sendString(dos, intent.getData().toString());
+				Parcel parcel = Parcel.obtain();
+				parcel.writeValue(intent);
+				byte[] bundledExtras = parcel.marshall();
+				dos.writeInt(bundledExtras.length);
+				dos.write(bundledExtras);
 			} finally {
 				dos.close();
 			}
@@ -99,17 +101,6 @@ public class Client {
 			}
 		}
 
-	}
-
-	/**
-	 * Send a string to the other end of the socket
-	 */
-
-	private void sendString(final DataOutputStream dos, final String string)
-		throws IOException {
-		byte[] data = string.getBytes("UTF-8");
-		dos.writeInt(data.length);
-		dos.write(data);
 	}
 
 	/**

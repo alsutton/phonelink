@@ -32,6 +32,17 @@ public class FunkyPhoneLinkActivity extends Activity {
 				}
 
         	} );
+
+        ((Button) findViewById(R.id.smsButton))
+    	.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				String number = ((EditText) findViewById(R.id.number)).getText().toString();
+				String text = ((EditText) findViewById(R.id.message_text)).getText().toString();
+				new SMSThread(number, text).start();
+			}
+
+    	} );
     }
 
     @Override
@@ -85,6 +96,27 @@ public class FunkyPhoneLinkActivity extends Activity {
     			Log.e("PhoneLink", "Problem sending intent", ex);
     		}
     	}
+    }
 
+    private class SMSThread extends Thread {
+    	private final String mNumber;
+    	private final String mMessage;
+
+    	SMSThread(final String number, final String message) {
+    		mNumber = number;
+    		mMessage = message;
+    	}
+
+    	@Override
+		public void run() {
+    		try {
+	    		Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:"+mNumber));
+	    		smsIntent.putExtra("recipients", mNumber);
+	    		smsIntent.putExtra("sms_body", mMessage);
+	    		Client.getInstance().sendIntent(FunkyPhoneLinkActivity.this, smsIntent);
+    		} catch(Exception ex) {
+    			Log.e("PhoneLink", "Problem sending intent", ex);
+    		}
+    	}
     }
 }
