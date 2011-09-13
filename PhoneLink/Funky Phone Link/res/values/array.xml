@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="empty_array" /> 
+
+    <string-array name="empty_device_array">
+    	<item>Always Ask</item> 
+    </string-array>
+    
+    <string-array name="empty_device_values_array">
+    	<item></item>
+    </string-array> 
+
+</resources>

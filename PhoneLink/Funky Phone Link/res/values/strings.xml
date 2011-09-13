@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, FunkyPhoneLinkActivity!</string>
+    <string name="app_name">Phone Link</string>
+    <string name="autostart">Auto Start</string>
+    <string name="autostart_summary">Start Phone Link when you turn your device</string>
+    <string name="default_device">Default Dialling Device</string>
+    <string name="default_device_summary">The device you wish to dial using</string>
+    <string name="preferences">Settings</string>
+    <string name="none">None</string>
+    <string name="dial">Dial</string>
+    <string name="number_hint">Phone Number</string>
+    <string name="strapbar">Phone Link by Funky Android Ltd.</string>
+</resources>
