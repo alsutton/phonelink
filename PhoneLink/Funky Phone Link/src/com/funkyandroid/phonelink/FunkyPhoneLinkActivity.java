@@ -83,6 +83,11 @@ public class FunkyPhoneLinkActivity extends Activity {
     }
 
     @Override
+    protected void onDestroy() {
+      unregisterReceiver(receiver);
+    }
+
+    @Override
 	public void onNewIntent(final Intent intent) {
     	if(Intent.ACTION_CALL.equals(intent.getAction())) {
     		new DiallerThread(intent.getDataString()).start();
