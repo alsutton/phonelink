@@ -1,7 +1,11 @@
 package com.funkyandroid.phonelink;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,15 +16,48 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.funkyandroid.phonelink.bluetooth.Client;
 
 public class FunkyPhoneLinkActivity extends Activity {
+
+	/**
+	 * The tag for logging entries
+	 */
+
+	public static final String LOG_TAG = "PhoneLink";
+
+	/**
+	 * The receiver for startup failures from the listener
+	 */
+	private final BroadcastReceiver receiver = new BroadcastReceiver() {
+    	@Override
+		public void onReceive(final Context context, final Intent intent) {
+        	String noBluetoothText = getString(R.string.listener_start_failed);
+        	Toast toast = Toast.makeText(context, noBluetoothText, Toast.LENGTH_LONG);
+        	toast.show();
+    	}
+    };
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        if(BluetoothAdapter.getDefaultAdapter() == null) {
+        	String noBluetoothText = getString(R.string.no_bluetooth);
+        	Toast toast = Toast.makeText(this, noBluetoothText, Toast.LENGTH_LONG);
+        	toast.show();
+        	finish();
+        	return;
+        }
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ListenerService.LISTENER_START_FAILED_INTENT);
+        registerReceiver(receiver, filter);
+
         startService(new Intent(this, ListenerService.class));
 
         ((Button) findViewById(R.id.button))
@@ -80,6 +117,9 @@ public class FunkyPhoneLinkActivity extends Activity {
         }
     }
 
+    /**
+     * Thread to deal with dialling a number
+     */
     private class DiallerThread extends Thread {
     	private final String mNumber;
 
@@ -98,6 +138,9 @@ public class FunkyPhoneLinkActivity extends Activity {
     	}
     }
 
+    /**
+     * Thread to deal with sending an SMS.
+     */
     private class SMSThread extends Thread {
     	private final String mNumber;
     	private final String mMessage;

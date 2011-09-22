@@ -15,4 +15,7 @@
     <string name="strapbar">Phone Link by Funky Android Ltd.</string>
     <string name="warning">This software is in an early stage of development. Please do not use unless you have read the instructions carefully and
     you are willing to accept there may be bugs.</string>
+        
+    <string name="no_bluetooth">Bluetooth must be enabled to use Phone Link.</string>
+    <string name="listener_start_failed">You device stopped Phone Link from listening for other devices.</string>
 </resources>

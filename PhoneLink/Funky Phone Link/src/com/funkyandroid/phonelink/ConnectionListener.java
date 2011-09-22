@@ -1,5 +1,7 @@
 package com.funkyandroid.phonelink;
 
+import java.io.IOException;
+
 /**
  * Interface for objects wishing to act as a listener for connections from
  * other devices
@@ -14,7 +16,8 @@ public interface ConnectionListener {
 	 * @intentHandler The handler for any read intents.
 	 */
 
-	public void activate(IntentHandler intentHandler);
+	public void activate(IntentHandler intentHandler)
+		throws IOException;
 
 	/**
 	 * Deactivate the listener so it no longer accepts connections.

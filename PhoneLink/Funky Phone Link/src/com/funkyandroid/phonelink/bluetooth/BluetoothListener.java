@@ -1,5 +1,7 @@
 package com.funkyandroid.phonelink.bluetooth;
 
+import java.io.IOException;
+
 import android.bluetooth.BluetoothAdapter;
 import android.util.Log;
 
@@ -19,7 +21,8 @@ public class BluetoothListener
 	/**
 	 * Activate the bluetooth listener.
 	 */
-	public void activate(final IntentHandler intentHandler) {
+	public void activate(final IntentHandler intentHandler)
+		throws IOException {
 		synchronized (BluetoothListener.class) {
 			if(currentlyActive != null) {
 				return;

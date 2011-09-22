@@ -1,14 +1,22 @@
 package com.funkyandroid.phonelink;
 
+import java.io.IOException;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.funkyandroid.phonelink.bluetooth.BluetoothListener;
 
 public class ListenerService
 	extends Service
 	implements IntentHandler {
+	/**
+	 * The intent broadcast if the listener fails to start
+	 */
+
+	public static final String LISTENER_START_FAILED_INTENT = "com.funkyandroid.phonelink.LISTER_STARTUP_FAILED";
 
 	/**
 	 * The Bluetooth Listener
@@ -26,8 +34,12 @@ public class ListenerService
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 
-		bluetoothListener.activate(this);
-
+		try {
+			bluetoothListener.activate(this);
+		} catch(IOException ex) {
+			Log.e(FunkyPhoneLinkActivity.LOG_TAG, "Error starting listener", ex);
+			sendBroadcast(new Intent(LISTENER_START_FAILED_INTENT));
+		}
 
 		return Service.START_STICKY;
 	}
