@@ -48,7 +48,8 @@ public class ListenerService
 	 * Handle an intent by dialling
 	 */
 	public void processIntent(Intent intent) {
-		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(intent);
+		Intent chooseIntent = Intent.createChooser(intent, getText(R.string.app_name));
+		chooseIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(chooseIntent);
 	}
 }

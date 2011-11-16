@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Parcel;
 import android.util.Log;
 
+import com.funkyandroid.phonelink.FunkyPhoneLinkActivity;
 import com.funkyandroid.phonelink.IntentHandler;
 
 /**
@@ -59,26 +60,16 @@ class ConnectionHandlerThread extends Thread {
 				resultCode = readStream(dis);
 			} catch(IOException ioe) {
 				Log.w("PhoneLink", "Problem getting data from client", ioe);
-			} finally {
-				try {
-					dis.close();
-				} catch(IOException ioe) {
-					// Ignore any exceptions on close.
-				}
 			}
-		} catch(IOException ioe) {
-			Log.w("PhoneLink", "Problem getting data from client", ioe);
-		}
 
-		try {
 			DataOutputStream dos = new DataOutputStream(mSocket.getOutputStream());
 			try {
 				dos.writeInt(resultCode);
-			} finally {
-				dos.close();
+			} catch(IOException ioe) {
+				Log.w("PhoneLink", "Problem sending response to client", ioe);
 			}
 		} catch(IOException ioe) {
-			Log.w("PhoneLink", "Problem sending response to client", ioe);
+			Log.w(FunkyPhoneLinkActivity.LOG_TAG, "Problem getting stream", ioe);
 		}
 	}
 

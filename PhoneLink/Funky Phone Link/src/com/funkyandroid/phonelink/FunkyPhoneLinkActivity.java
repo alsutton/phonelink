@@ -83,8 +83,19 @@ public class FunkyPhoneLinkActivity extends Activity {
     }
 
     @Override
+    public void onResume() {
+    	super.onResume();
+
+    	Intent intent = getIntent();
+    	if(intent != null && intent.getAction().equals(Intent.ACTION_SEND)) {
+    		finish();
+    	}
+    }
+
+    @Override
     protected void onDestroy() {
       unregisterReceiver(receiver);
+      super.onDestroy();
     }
 
     @Override

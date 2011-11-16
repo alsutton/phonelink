@@ -73,25 +73,17 @@ public class Client {
 			socket.connect();
 
 			DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-			try {
-				dos.writeInt(PROTOCOL_VERSION);
-				Parcel parcel = Parcel.obtain();
-				parcel.writeValue(intent);
-				byte[] bundledExtras = parcel.marshall();
-				dos.writeInt(bundledExtras.length);
-				dos.write(bundledExtras);
-			} finally {
-				dos.close();
-			}
+			dos.writeInt(PROTOCOL_VERSION);
+			Parcel parcel = Parcel.obtain();
+			parcel.writeValue(intent);
+			byte[] bundledExtras = parcel.marshall();
+			dos.writeInt(bundledExtras.length);
+			dos.write(bundledExtras);
 
 			DataInputStream dis = new DataInputStream(socket.getInputStream());
-			try {
-				int resultCode = dis.readInt();
-				if( resultCode != 0 ) {
-					throw new PhoneLinkRemoteException(resultCode);
-				}
-			} finally {
-				dis.close();
+			int resultCode = dis.readInt();
+			if( resultCode != 0 ) {
+				throw new PhoneLinkRemoteException(resultCode);
 			}
 		} finally {
 			try {

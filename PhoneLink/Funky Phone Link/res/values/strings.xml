@@ -18,4 +18,7 @@
         
     <string name="no_bluetooth">Bluetooth must be enabled to use Phone Link.</string>
     <string name="listener_start_failed">You device stopped Phone Link from listening for other devices.</string>
+    
+    <string name="transferred">PhoneLink: Data Sent</string>
+    <string name="transfer_failed">PhoneLink: Error Sending</string>
 </resources>
